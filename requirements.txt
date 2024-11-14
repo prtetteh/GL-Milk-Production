@@ -1,7 +1,7 @@
 streamlit
 pandas
 numpy
-matplotlib
+matplotlib.pyplot
 plotly
 statsmodels.tsa.holtwinters
 sklearn.model_selection
