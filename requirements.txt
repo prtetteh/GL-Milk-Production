@@ -3,5 +3,5 @@ pandas
 numpy
 matplotlib
 plotly
-sklearn
+scikit-learn
 seaborn
