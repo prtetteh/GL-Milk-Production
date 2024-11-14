@@ -4,5 +4,5 @@ numpy
 matplotlib.pyplot
 plotly
 statsmodels.tsa.holtwinters
-sklearn.model_selection
+scikit-learn
 seaborn
