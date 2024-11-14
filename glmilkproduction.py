@@ -3,7 +3,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from scikit_learn.model_selection import train_test_split
+#from scikit_learn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split
+
 
 # Set up Streamlit layout and theme
 st.set_page_config(layout="wide", page_title="Milk Production Analysis")
