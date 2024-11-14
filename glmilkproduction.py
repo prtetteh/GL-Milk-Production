@@ -3,8 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from statsmodels.tsa.holtwinters import SimpleExpSmoothing
-from sklearn.model_selection import train_test_split
+from scikit-learn.model_selection import train_test_split
 
 # Set up Streamlit layout and theme
 st.set_page_config(layout="wide", page_title="Milk Production Analysis")
@@ -67,20 +66,30 @@ st.pyplot(fig)
 # Split the data into train and test sets
 train, test = train_test_split(data, test_size=0.2, shuffle=False)
 
-# Fit Simple Exponential Smoothing model on the training set
-model = SimpleExpSmoothing(train['Production'])
-fitted_model = model.fit(smoothing_level=0.1, optimized=False)
+# Exponential Smoothing Forecast (Manual Implementation)
+alpha = 0.1  # Set the smoothing level
+train_production = train['Production'].values
+forecast = [train_production[0]]  # Initialize forecast list with the first production value
 
-# Forecast for the length of the test set
-forecast = fitted_model.forecast(steps=len(test))
-forecast_df = pd.DataFrame({'Actual': test['Production'], 'Forecast': forecast})
+# Calculate forecast for each period in the test set
+for i in range(1, len(train_production)):
+    forecast_value = alpha * train_production[i-1] + (1 - alpha) * forecast[-1]
+    forecast.append(forecast_value)
+
+# Extend forecast to cover test data period
+for _ in range(len(test)):
+    forecast_value = alpha * forecast[-1] + (1 - alpha) * forecast[-1]
+    forecast.append(forecast_value)
+
+# Prepare forecast DataFrame for comparison
+forecast_df = pd.DataFrame({'Actual': test['Production'], 'Forecast': forecast[-len(test):]}, index=test.index)
 
 # Display Actual vs Forecast Plot
 st.subheader("Actual vs Forecast Milk Production")
 fig, ax = plt.subplots(figsize=(12, 6))
 ax.plot(train['Production'], label='Training Data', color='black')
 ax.plot(test['Production'], label='Test Data', color='blue')
-ax.plot(forecast, label='Forecasted Data', color='orange')
+ax.plot(test.index, forecast_df['Forecast'], label='Forecasted Data', color='orange')
 ax.set_title("Actual vs Forecast Milk Production")
 ax.set_xlabel('Date')
 ax.set_ylabel('Milk Production (pounds)')
@@ -112,7 +121,7 @@ fig, ax = plt.subplots(figsize=(12, 6))
 ax.plot(data['Production'], label='Production', color=production_color)
 ax.plot(data['SMA_12'], label='12-Month SMA', color=sma_color)
 ax.plot(data['EMA_12'], label='12-Month EMA', color=ema_color)
-ax.plot(forecast, label='Forecast', color=forecast_color)
+ax.plot(forecast_df.index, forecast_df['Forecast'], label='Forecast', color=forecast_color)
 ax.set_title("Customized Plot with Selected Colors")
 ax.set_xlabel('Date')
 ax.set_ylabel('Milk Production (pounds)')
