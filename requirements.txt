@@ -3,6 +3,6 @@ pandas
 numpy
 matplotlib
 plotly
-statsmodels
-sklearn
+statsmodels.tsa.holtwinters
+sklearn.model_selection
 seaborn
