@@ -3,6 +3,5 @@ pandas
 numpy
 matplotlib.pyplot
 plotly
-statsmodels.tsa.holtwinters
 scikit-learn
 seaborn
